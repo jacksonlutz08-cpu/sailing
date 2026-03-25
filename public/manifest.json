@@ -1,0 +1,49 @@
+{
+  "name": "BlueHorizon - Offshore Sailing Companion",
+  "short_name": "BlueHorizon",
+  "description": "Secure document vault, vessel intelligence, and compliance for offshore sailors",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#1e40af",
+  "background_color": "#f5f3ff",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshot1.png",
+      "sizes": "540x720",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["navigation", "productivity"],
+  "shortcuts": [
+    {
+      "name": "Secure Vault",
+      "short_name": "Vault",
+      "description": "Access your encrypted documents",
+      "url": "/vault",
+      "icons": [{ "src": "/icon-vault.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Vessel Status",
+      "short_name": "Heartbeat",
+      "description": "Check vessel maintenance and alerts",
+      "url": "/heartbeat",
+      "icons": [{ "src": "/icon-heartbeat.png", "sizes": "192x192" }]
+    }
+  ]
+}
