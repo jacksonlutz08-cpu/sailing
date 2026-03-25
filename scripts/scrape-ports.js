@@ -10,7 +10,7 @@
  * node scripts/scrape-ports.js
  */
 
-import NGAPortScraper from '../lib/scrapers/nga-ports.js';
+import NGAPortScraper from '../lib/scrapers/nga-ports.ts';
 
 async function main() {
   console.log('🚢 Starting NGA World Port Index scraper...');
@@ -43,7 +43,10 @@ async function main() {
 
 // Run if called directly
 if (import.meta.url === `file://${process.argv[1]}`) {
-  main();
+  main().catch(err => {
+    console.error('❌ Unhandled error:', err);
+    process.exit(1);
+  });
 }
 
 export default main;
