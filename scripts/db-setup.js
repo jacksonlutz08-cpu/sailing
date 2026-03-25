@@ -14,15 +14,22 @@ import { createClient } from '@supabase/supabase-js';
 import fs from 'fs';
 import path from 'path';
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
-
 async function setupDatabase() {
   console.log('🗄️ Setting up BlueHorizon database...');
 
   try {
+    // Validate environment variables
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
+      throw new Error('❌ NEXT_PUBLIC_SUPABASE_URL environment variable is not set');
+    }
+    if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      throw new Error('❌ SUPABASE_SERVICE_ROLE_KEY environment variable is not set');
+    }
+
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL,
+      process.env.SUPABASE_SERVICE_ROLE_KEY
+    );
     // Read the schema file
     const schemaPath = path.join(process.cwd(), 'database', 'schema.sql');
     const schemaSQL = fs.readFileSync(schemaPath, 'utf8');
@@ -65,14 +72,31 @@ async function setupDatabase() {
     }
 
   } catch (error) {
-    console.error('❌ Database setup failed:', error);
+    if (error instanceof Error) {
+      if (error.message.includes('NEXT_PUBLIC_SUPABASE_URL') || error.message.includes('SUPABASE_SERVICE_ROLE_KEY')) {
+        console.error(error.message);
+        console.error('\n📋 To set up Supabase:');
+        console.error('  1. Create a Supabase project at https://supabase.com');
+        console.error('  2. Create a .env.local file with:');
+        console.error('     NEXT_PUBLIC_SUPABASE_URL=your_supabase_url');
+        console.error('     SUPABASE_SERVICE_ROLE_KEY=your_service_role_key');
+        console.error('  3. Run: npm run db-setup');
+      } else {
+        console.error('❌ Database setup failed:', error.message);
+      }
+    } else {
+      console.error('❌ Database setup failed:', error);
+    }
     process.exit(1);
   }
 }
 
 // Run if called directly
 if (import.meta.url === `file://${process.argv[1]}`) {
-  setupDatabase();
+  setupDatabase().catch(err => {
+    console.error('❌ Unhandled error:', err);
+    process.exit(1);
+  });
 }
 
 export default setupDatabase;
